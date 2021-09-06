@@ -15,6 +15,17 @@ class EmployeeControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
+    void getEmployeeId() {
+        // Arrange
+        int id = 100;
+        // Act
+        EmployeeResponse response = restTemplate.getForObject("/employees/" + id, EmployeeResponse.class);
+        // Assert
+        assertEquals(id, response.getId());
+        assertEquals("chairat", response.getName());
+    }
+
+    @Test
     void listEmployee() {
         // Act
         EmployeeResponse[] responses = restTemplate.getForObject("/employees", EmployeeResponse[].class);
