@@ -17,7 +17,7 @@ class EmployeeServiceUnitTest {
     private EmployeeRepository employeeRepository;
 
     @Test
-    void getEmployeeId() {
+    public void success_case() {
         // Arrange
         Employee employee = new Employee();
         employee.setId(1);
@@ -32,6 +32,31 @@ class EmployeeServiceUnitTest {
     }
 
     @Test
-    void listEmployee() {
+    public void employee_not_found_case() {
+        // Arrange
+        when(employeeRepository.findById(1)).thenReturn(Optional.empty());
+        // Act
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        try {
+            employeeService.getById(1);
+            fail();
+        } catch (EmployeeNotFoundException e) {
+            // pass
+            if (!"Employee not found id=1".equals(e.getMessage())) {
+                fail("Message fail with=" + e.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void employee_not_found_case_with_junit5() {
+        // Arrange
+        when(employeeRepository.findById(1)).thenReturn(Optional.empty());
+        // Act
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        Exception exception = assertThrows(EmployeeNotFoundException.class, () -> {
+            employeeService.getById(1);
+        });
+        assertEquals("Employee not found id=1", exception.getMessage());
     }
 }
