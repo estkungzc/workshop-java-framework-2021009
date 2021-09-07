@@ -13,5 +13,5 @@ public class EmployeeControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse(404, exception.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
-    
+
 }
