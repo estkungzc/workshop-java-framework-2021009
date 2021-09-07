@@ -1,6 +1,7 @@
 package com.example.demoapp.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -11,15 +12,18 @@ import java.util.Optional;
 @Component
 public class UserGateway {
 
-    private RestTemplate restTemplate;
+    private final String apiHost;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public UserGateway(RestTemplateBuilder builder) {
+    public UserGateway(RestTemplateBuilder builder,
+                       @Value("${external_api_url}") String apiHost) {
         this.restTemplate = builder.build();
+        this.apiHost = apiHost;
     }
 
     public Optional<UserResponse> getUserById(int id) {
-        String url = "https://jsonplaceholder.typicode.com/users/" + id;
+        String url = apiHost + "/users/" + id;
         try {
             UserResponse result = restTemplate.getForObject(url, UserResponse.class);
             return Optional.ofNullable(result);
